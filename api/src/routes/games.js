@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { Videogame } = require("../db");
 const {
-  listVideoGames,
+  getVideoGames,
   addVideoGames,
   detailVideoGame,
 } = require("../controllers/controller");
@@ -10,7 +10,7 @@ const router = Router();
 router.get("/", async (req, res) => {
   const { search } = req.query;
   try {
-    const listVideoGame = await listVideoGames(search);
+    const listVideoGame = await getVideoGames(search);
     res.status(200).send(listVideoGame);
   } catch (error) {
     res.status(404).send(error.message || error);
@@ -18,16 +18,9 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { name, description, release_date, rating, platforms, genre } =
-    req.body;
+  // const { name, description, release_date, rating, platforms } = req.body;
   try {
-    const newVideoGame = await addVideoGames({
-      name,
-      description,
-      release_date,
-      rating,
-      platforms,
-    });
+    const newVideoGame = await addVideoGames(req.body);
     res.status(200).send(newVideoGame);
   } catch (error) {
     res.status(404).send(error.message || error);
