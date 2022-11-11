@@ -12,7 +12,6 @@ const getVideoGames = async (search) => {
       search = search.toLowerCase();
 
       // Organizado valores de la BD
-
       let game = await Videogame.findAll({
         where: {
           name: { [Op.substring]: search },
@@ -25,18 +24,20 @@ const getVideoGames = async (search) => {
           },
         },
       });
+      
       game = game.map((data) => {
         return {
-          id: data.id,
-          name: data.name,
-          description: data.description,
-          release_date: data.release_date,
-          rating: data.rating,
-          platforms: data.plataforms.map((plataforma) => plataforma.name),
+          id: data.dataValues.id,
+          name: data.dataValues.name,
+          description: data.dataValues.description,
+          release_date: data.dataValues.release_date,
+          rating: data.dataValues.rating,
+          platforms: data.dataValues.platforms.map((plataforma) => plataforma.name),
         };
       });
-
+      
       // Buscar y editar info de la api
+      
       let apiGames = await fetch(
         `https://api.rawg.io/api/games?search=${search}&key=${API_KEY}`
       ).then((data) => data.json());
@@ -224,7 +225,7 @@ const listGenres = async () => {
 const detailVideoGame = async (id) => {
   const regex =
     /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
-  const api = await fetch(link + `/${id}?key=${API_KEY}`).then((data) =>
+  const api = await fetch(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`).then((data) =>
     data.json()
   );
 
