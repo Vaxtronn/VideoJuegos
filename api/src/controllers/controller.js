@@ -3,8 +3,6 @@ const { Op } = require("sequelize");
 const { API_KEY, Videogame, Genre } = require("../db");
 const fetch = require("node-fetch");
 
-const link = "https://api.rawg.io/api/games";
-const link2 = "https://api.rawg.io/api/genres";
 
 const getVideoGames = async (search) => {
   try {
@@ -24,22 +22,24 @@ const getVideoGames = async (search) => {
           },
         },
       });
+
       
       game = game.map((data) => {
         return {
           id: data.dataValues.id,
           name: data.dataValues.name,
+          genres: data.dataValues.genres.map((genero) => genero.name),
           description: data.dataValues.description,
           release_date: data.dataValues.release_date,
           rating: data.dataValues.rating,
-          platforms: data.dataValues.platforms.map((plataforma) => plataforma.name),
+          platforms: data.dataValues.platforms.map((plataforma) => plataforma),
         };
       });
       
       // Buscar y editar info de la api
       
       let apiGames = await fetch(
-        `https://api.rawg.io/api/games?search=${search}&key=${API_KEY}`
+        `https://api.rawg.io/api/games?search=${search}&key=${API_KEY}&page_size=15`
       ).then((data) => data.json());
 
       apiGames = apiGames.results
@@ -93,7 +93,7 @@ const getVideoGames = async (search) => {
       // Buscar y editar info de la api
 
       let apiGames = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}`
+        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=15`
       ).then((data) => data.json());
 
       apiGames = apiGames.results.map((data) => {
@@ -122,7 +122,6 @@ const getVideoGames = async (search) => {
             return ac;
           }
         }, []);
-
       let promise = apiGenres.map((genre) => {
         Genre.findOrCreate({
           where: {
@@ -144,9 +143,9 @@ const getVideoGames = async (search) => {
       });
       games = games.map((game) => {
         return {
-          id: game.id,
+          id: game.dataValues.id,
           name: game.dataValues.name,
-          genres: game.dataValues.genres,
+          genres: game.dataValues.genres.map((genero) => genero.name),
           description: game.dataValues.description,
           release_date: game.dataValues.release_date,
           rating: game.dataValues.rating,
@@ -179,15 +178,10 @@ const addVideoGames = async (body) => {
         platforms,
       },
     }).then(([newGame, created]) => newGame);
-
-    let promise = genres.map( (data) => 
+    let promise = genres.map( (name) => 
       Genre.findOrCreate({
-        where: {name: data},
-        defaults: {
-          name: data
-        }
+        where: {name: name},
       }).then(([genre, created]) => genre));
-
     let result = await Promise.all(promise);
     await newGame.addGenres(result);
     return newGame;
@@ -259,7 +253,18 @@ const detailVideoGame = async (id) => {
           }
         }
       });
-      return game;
+      console.log(game);
+      if(game) {
+        return {
+          id: game.dataValues.id,
+          name: game.dataValues.name,
+          genres: game.dataValues.genres.map((genero) => genero.name),
+          description: game.dataValues.description,
+          release_date: game.dataValues.release_date,
+          rating: game.dataValues.rating,
+          platforms: game.dataValues.platforms,
+        }
+      }
     }
   } catch (error) {
     throw error;
