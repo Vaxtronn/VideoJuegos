@@ -75,9 +75,9 @@ const getVideoGames = async (search) => {
       let promise = apiGenres.map((genre) => {
         Genre.findOrCreate({
           where: {
-            name: genre.toLowerCase(),
+            name: genre,
           },
-          default: { name: genre.toLowerCase() },
+          default: { name: genre },
         }).then(([user, created]) => user);
       });
 
@@ -125,9 +125,9 @@ const getVideoGames = async (search) => {
       let promise = apiGenres.map((genre) => {
         Genre.findOrCreate({
           where: {
-            name: genre.toLowerCase(),
+            name: genre,
           },
-          default: { name: genre.toLowerCase() },
+          default: { name: genre },
         }).then(([user, created]) => user);
       });
       await Promise.all(promise);
