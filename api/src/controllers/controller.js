@@ -253,17 +253,14 @@ const detailVideoGame = async (id) => {
           }
         }
       });
-      console.log(game);
-      if(game) {
-        return {
-          id: game.dataValues.id,
-          name: game.dataValues.name,
-          genres: game.dataValues.genres.map((genero) => genero.name),
-          description: game.dataValues.description,
-          release_date: game.dataValues.release_date,
-          rating: game.dataValues.rating,
-          platforms: game.dataValues.platforms,
-        }
+      return {
+        id: game.dataValues.id,
+        name: game.dataValues.name,
+        genres: game.dataValues.genres.map((genero) => genero.name),
+        description: game.dataValues.description,
+        release_date: game.dataValues.release_date,
+        rating: game.dataValues.rating,
+        platforms: game.dataValues.platforms,
       }
     }
   } catch (error) {
