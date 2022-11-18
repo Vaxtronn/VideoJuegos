@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { gettAllVideoGames } from "../../redux/actions/index";
-import VideoGame from "../VideoGame/VideoGame";
+import ListGames from "../ListGames/ListGames";
+import Paginado from "../Paginado/Paginado";
 import "./home.css";
 
 function Home() {
   const dispatch = useDispatch();
-
-  // const filterVideoGames = useSelector((state) => state.filterVideoGames);
-  // const filterBy = useSelector((state) => state.filterBy);
-  // const orderBy = useSelector((state) => state.orderBy);
-  let videogames = useSelector((state) => state.videogames);
 
   // montamos el componente
   useEffect(() => {
@@ -21,23 +17,11 @@ function Home() {
   return (
     <div className="home">
       <div className="titulo">
-        <h1>Catalog VideoGame</h1>
-        <button type="button" onClick={() => window.location.reload()}>Reset</button>
+        {/* <button type="button" onClick={() => window.location.reload()}>Reset</button> */}
         <hr id="espacio"/>
       </div>
-      {
-        videogames.length ? videogames.map((game) => {
-          return(
-            <VideoGame
-            key={game.id}
-            id={game.id}
-            img={game.img}
-            name={game.name}
-            genres={`Genres: ${game.genres.join(", ")}`}
-            />
-          )
-        }): <h1>Loading</h1>
-      }
+      <ListGames />
+      <Paginado />
     </div>
   )
 

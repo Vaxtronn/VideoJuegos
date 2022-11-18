@@ -26,6 +26,7 @@ const Form = () => {
     release_date: "",
     rating: 0,
     platforms: [],
+    background_image: "",
     genres: [],
   });
 
@@ -63,6 +64,7 @@ const Form = () => {
       release_date: input.release_date,
       rating: input.rating,
       platforms: input.platforms,
+      background_image: input.background_image,
       genres: input.genres,
     };
 
@@ -105,6 +107,7 @@ const Form = () => {
       release_date: "",
       rating: 0,
       platforms: [],
+      background_image: "",
       genres: [],
     });
   };
@@ -179,6 +182,15 @@ const Form = () => {
             ))}
           </div>
         </div>
+        <hr />
+        
+        <label>Image: </label>
+        <input
+          key="background_image"
+          type="text"
+          name="background_image"
+          defaultValue={input.background_image}
+        />
         <hr />
 
         <div className="checkbox">

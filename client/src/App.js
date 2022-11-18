@@ -6,6 +6,7 @@ import Landing from "./components/Landing/Landing.jsx";
 import Home from "./components/Home/Home.jsx"
 import VideoGameDetail from './components/VideoGameDetail/VideoGameDetail';
 
+
 function App() {
   return (
     <div className="App">
