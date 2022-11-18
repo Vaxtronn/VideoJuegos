@@ -33,14 +33,18 @@ const getVideoGames = async (search) => {
           release_date: data.dataValues.release_date,
           rating: data.dataValues.rating,
           platforms: data.dataValues.platforms.map((plataforma) => plataforma),
+          img: data.dataValues.background_image,
         };
       });
       
       // Buscar y editar info de la api
       
       let apiGames = await fetch(
-        `https://api.rawg.io/api/games?search=${search}&key=${API_KEY}&page_size=15`
+        `https://api.rawg.io/api/games?search=${search}&key=${API_KEY}&page_size=100`
       ).then((data) => data.json());
+
+      let test = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&page=2&page_size=100`)
+      .then(data=>data.json());
 
       apiGames = apiGames.results
         .map((data) => {
@@ -59,9 +63,28 @@ const getVideoGames = async (search) => {
         .filter((game) =>
           game.name.toLowerCase().includes(search.toLowerCase())
         );
+      
+      test = test.results.map((data) => {
+        return {
+          id: data.id,
+          name: data.name,
+          genres: data.genres.map((genero) => genero.name),
+          rating: data.rating,
+          release_date: data.released,
+          platforms: data.platforms.map(
+            (plataforma) => plataforma.platform.name
+          ),
+          img: data.background_image,
+        };
+      })
+      .filter((game) =>
+          game.name.toLowerCase().includes(search.toLowerCase())
+        );
+
+      let union = [...apiGames, ...test];
 
       // Crea generos en BD
-      let apiGenres = apiGames
+      let apiGenres = union
         .map((gen) => gen.genres)
         .flat()
         .reduce((ac, a) => {
@@ -84,17 +107,21 @@ const getVideoGames = async (search) => {
       await Promise.all(promise);
 
       //Uniendo las dos busquedas en una sola
-      const allGames = [...game, ...apiGames];
+      const allGames = [...game, ...union];
 
-      if (allGames.length === 0) throw new Error(`${name} didn't found`);
+      if (allGames.length === 0) throw new Error(`${search} didn't found`);
 
       return allGames;
     } else {
       // Buscar y editar info de la api
 
       let apiGames = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=15`
+        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=100`
       ).then((data) => data.json());
+
+      let test = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&page=2&page_size=100`)
+      .then(data=>data.json());
+
 
       apiGames = apiGames.results.map((data) => {
         return {
@@ -110,9 +137,25 @@ const getVideoGames = async (search) => {
         };
       });
 
+      test = test.results.map((data) => {
+        return {
+          id: data.id,
+          name: data.name,
+          genres: data.genres.map((genero) => genero.name),
+          rating: data.rating,
+          release_date: data.released,
+          platforms: data.platforms.map(
+            (plataforma) => plataforma.platform.name
+          ),
+          img: data.background_image,
+        };
+      });
+
+      let union = [...apiGames, ...test];
+
       // Crea generos en BD
 
-      let apiGenres = apiGames
+      let apiGenres = union
         .map((gen) => gen.genres)
         .flat()
         .reduce((ac, a) => {
@@ -150,11 +193,12 @@ const getVideoGames = async (search) => {
           release_date: game.dataValues.release_date,
           rating: game.dataValues.rating,
           platforms: game.dataValues.platforms,
+          img: game.dataValues.background_image,
         };
       });
 
       // Uniendo los valores
-      const allGames = [...games, ...apiGames];
+      const allGames = [...games, ...union];
       return allGames;
     }
   } catch (error) {
@@ -163,7 +207,7 @@ const getVideoGames = async (search) => {
 };
 
 const addVideoGames = async (body) => {
-  const { name, description, release_date, rating, platforms, genres } = body;
+  const { name, description, release_date, rating, platforms, background_image, genres } = body;
   // console.log(body);
   if (!name || !description || !platforms) {
     throw new Error("No se agrego un video juego, faltan parametros");
@@ -176,6 +220,7 @@ const addVideoGames = async (body) => {
         release_date,
         rating,
         platforms,
+        background_image,
       },
     }).then(([newGame, created]) => newGame);
     let promise = genres.map( (name) => 
@@ -257,10 +302,11 @@ const detailVideoGame = async (id) => {
         id: game.dataValues.id,
         name: game.dataValues.name,
         genres: game.dataValues.genres.map((genero) => genero.name),
-        description: game.dataValues.description,
-        release_date: game.dataValues.release_date,
         rating: game.dataValues.rating,
+        release_date: game.dataValues.release_date,
         platforms: game.dataValues.platforms,
+        img: game.dataValues.background_image,
+        description: game.dataValues.description,
       }
     }
   } catch (error) {
