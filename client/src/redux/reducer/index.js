@@ -5,7 +5,11 @@ import {
   LIST_GENRES,
   DETAIL_VIDEOGAME_ID,
   DETAIL_VIDEOGAME_NAME,
-  RESET
+  RESET,
+  VIEWGAMES,
+  SUMPAGE,
+  DECPAGE,
+  UPDATEPAG
 } from "../actions/const";
 
 const initialState = {
@@ -14,6 +18,9 @@ const initialState = {
   searchVideoGame: [],
   searchVideoGameById: {},
   searchVideoGameByName: [],
+  currentPage: 0,
+  limitGames: 15,
+  viewGames: [],
   createVideoGame: null,
 };
 
@@ -27,12 +34,33 @@ const rootReducer = (state = initialState, action) => {
     case DETAIL_VIDEOGAME_NAME:
       return {
         ...state,
-        searchVideoGameByName: action.payload,
+        videogames: action.payload,
+      };
+    case VIEWGAMES:
+      let sum = [...state.videogames].slice(state.currentPage*state.limitGames, state.currentPage*state.limitGames+state.limitGames);
+      return {
+        ...state,
+        viewGames: sum,
       };
     case DETAIL_VIDEOGAME_ID:
       return {
         ...state,
         searchVideoGameById: action.payload,
+      };
+    case SUMPAGE:
+      return {
+        ...state,
+        currentPage: ++state.currentPage,
+      };
+    case DECPAGE:
+      return {
+        ...state,
+        currentPage: --state.currentPage,
+      };
+    case UPDATEPAG:
+      return {
+        ...state,
+        currentPage: Number(action.payload),
       };
     case LIST_GENRES:
       return {

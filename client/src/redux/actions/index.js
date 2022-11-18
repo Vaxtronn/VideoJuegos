@@ -4,7 +4,11 @@ import {
   LIST_GENRES,
   DETAIL_VIDEOGAME_ID,
   DETAIL_VIDEOGAME_NAME,
-  RESET
+  RESET,
+  VIEWGAMES,
+  SUMPAGE,
+  DECPAGE,
+  UPDATEPAG
 } from "./const.js";
 
 export const gettAllVideoGames = () => {
@@ -22,8 +26,11 @@ export const gettAllVideoGames = () => {
 export const gettVideoGameByName = (name) => {
   return async (dispatch) => {
     const GamebyName = await fetch(
-      `http://localhost:3001/videogames?name=${name}`
+      `http://localhost:3001/videogames?search=${name}`
     ).then((res) => res.json());
+    console.log(name);
+    console.log("Estoy en la accion");
+    console.log(GamebyName);
     dispatch({
       type: DETAIL_VIDEOGAME_NAME,
       payload: GamebyName,
@@ -77,5 +84,29 @@ export const resetAll = () => {
     dispatch({
       type: RESET,
     })
+  }
+}
+export const getViewGames = () => {
+  return {
+      type: VIEWGAMES,
+  }
+}
+
+export const sumPage = () => {
+  return {
+      type: SUMPAGE,
+  }
+}
+
+export const decPage = () => {
+  return {
+      type: DECPAGE,
+  }
+}
+
+export const updatePage = (num) => {
+  return {
+      type: UPDATEPAG,
+      payload: num
   }
 }
