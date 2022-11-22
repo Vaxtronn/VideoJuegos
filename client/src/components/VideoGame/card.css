@@ -1,11 +1,15 @@
 .box img {
-  width: 200px;
-  height: 240px;
-  border-radius: 30px;
+  width: 480px;
+  height: 300px;
+  border-radius: 20px;
+  margin-bottom: -2vmin;
 }
 .box p{
   text-align: center;
   font-size: 18px;
+}
+.genres {
+  color: white;
 }
 
 .box {
@@ -13,6 +17,6 @@
 }
 
 .barra {
-  color: black;
+  color: white;
   text-decoration: none;
 }

@@ -16,8 +16,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         set(value) {
-          this.setDataValue("name", value.toLowerCase())
-        }
+          let resp = value.split(" ").map((el) =>el.split("").map((let, idx) => (idx == 0 ? let.toUpperCase() : let)).join("")).join(" ");
+          this.setDataValue("name", resp);
+        },
       },
       description: {
         type: DataTypes.STRING,

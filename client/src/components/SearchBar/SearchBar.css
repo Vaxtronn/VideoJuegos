@@ -1,0 +1,18 @@
+
+.barra {
+  font-size: 1.2rem;
+  width: 500px;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  border: none;
+  background-color: rgba(235, 236, 238, 0.9372549019607843);
+  border-radius: 0.2rem;
+  margin-top: 10px;
+}
+
+.btn {
+  color: #fff;
+  font-size: 1.2rem;
+  background-color: #07072c;
+  border-radius: 0.5rem;
+}

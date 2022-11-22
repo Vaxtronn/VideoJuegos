@@ -13,7 +13,7 @@ function App() {
       <Route exact path="/">
         <Landing />
       </Route> 
-      <Route path="/videogames" component={Navbar} />
+      <Route exact path="/videogames" component={Navbar} />
       <Route exact path="/videogames/post" component={Form} />
       <Route exact path="/videogames/detail/:id" component={VideoGameDetail} />
       <Route exact path="/videogames" component={Home} />

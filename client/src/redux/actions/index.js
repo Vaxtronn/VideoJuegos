@@ -4,14 +4,14 @@ import {
   LIST_GENRES,
   DETAIL_VIDEOGAME_ID,
   DETAIL_VIDEOGAME_NAME,
-  RESET,
   VIEWGAMES,
   SUMPAGE,
   DECPAGE,
-  UPDATEPAG
+  UPDATEPAG,
+  FILTER_GAMES,
 } from "./const.js";
 
-export const gettAllVideoGames = () => {
+export const getAllGames = () => {
   return async (dispatch) => {
     const detail = await fetch(`http://localhost:3001/videogames`).then((res) =>
       res.json()
@@ -23,14 +23,11 @@ export const gettAllVideoGames = () => {
   };
 };
 
-export const gettVideoGameByName = (name) => {
+export const getGameByName = (name) => {
   return async (dispatch) => {
     const GamebyName = await fetch(
       `http://localhost:3001/videogames?search=${name}`
     ).then((res) => res.json());
-    console.log(name);
-    console.log("Estoy en la accion");
-    console.log(GamebyName);
     dispatch({
       type: DETAIL_VIDEOGAME_NAME,
       payload: GamebyName,
@@ -38,7 +35,7 @@ export const gettVideoGameByName = (name) => {
   };
 };
 
-export const gettVideoGameById = (id) => {
+export const getGameById = (id) => {
   return async (dispatch) => {
     const GamebyId = await fetch(`http://localhost:3001/videogames/${id}`).then(
       (res) => res.json()
@@ -79,34 +76,42 @@ export const getGenres = () => {
   };
 };
 
-export const resetAll = () => {
-  return (dispatch) => {
-    dispatch({
-      type: RESET,
-    })
-  }
-}
 export const getViewGames = () => {
   return {
-      type: VIEWGAMES,
-  }
-}
+    type: VIEWGAMES,
+  };
+};
 
 export const sumPage = () => {
   return {
-      type: SUMPAGE,
-  }
-}
+    type: SUMPAGE,
+  };
+};
 
 export const decPage = () => {
   return {
-      type: DECPAGE,
-  }
-}
+    type: DECPAGE,
+  };
+};
 
 export const updatePage = (num) => {
   return {
-      type: UPDATEPAG,
-      payload: num
-  }
-}
+    type: UPDATEPAG,
+    payload: num,
+  };
+};
+
+export const filterGames = (data) => {
+  return {
+    type: FILTER_GAMES,
+    payload: data,
+  };
+};
+
+export const cleanUp = () => {
+  let reset = {};
+  return {
+    type: DETAIL_VIDEOGAME_ID,
+    payload: reset,
+  };
+};

@@ -1,17 +1,29 @@
 .home {
   width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,0,0,0.592874649859944) 48%, rgba(0,212,255,1) 100%);
 }
 
 .titulo {
   width: 100%;
   text-align: center;
   font-weight: bold;
-  margin: 5px;
+  margin: 10px;
   font-size: 30px;
+}
+
+.btn-reset {
+  color: #fff;
+  font-size: 1.2rem;
+  background-color: #07072c;
+  border-radius: 0.5rem;
+  margin-left: 50px;
+  cursor: pointer;
 }
 
 #espacio {

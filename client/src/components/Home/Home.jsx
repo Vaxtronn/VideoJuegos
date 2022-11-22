@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { gettAllVideoGames } from "../../redux/actions/index";
+import { getAllGames } from "../../redux/actions/index";
+import Filter from "../Filter/Filter";
 import ListGames from "../ListGames/ListGames";
 import Paginado from "../Paginado/Paginado";
 import "./home.css";
@@ -11,17 +12,21 @@ function Home() {
   // montamos el componente
   useEffect(() => {
     // Buscamos todos los videogames -> didMount
-    dispatch(gettAllVideoGames());
+    dispatch(getAllGames());
   }, [dispatch]);
 
   return (
     <div className="home">
       <div className="titulo">
-        {/* <button type="button" onClick={() => window.location.reload()}>Reset</button> */}
+        <button className="btn-reset" type="button" onClick={() => window.location.reload()}>Reset</button>
         <hr id="espacio"/>
       </div>
-      <ListGames />
-      <Paginado />
+      <div>
+        <Filter />
+        <ListGames />
+        <Paginado />
+      </div>
+
     </div>
   )
 

@@ -1,7 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {Link} from 'react-router-dom';
 import { createVideoGames, getGenres } from "../../redux/actions/index";
 import "./Form.css";
+
+function validate(input) {
+  let error = {};
+  // Validaciones
+  if (!input.name) {
+    error.name = "Name is required";
+  }
+
+  if (!input.description) {
+    error.description = "Description is required";
+  }
+
+  if (!input.release_date) {
+    error.release_date = "Release date is required";
+  }
+
+  if (!input.rating) {
+    error.rating = "Rating is required";
+  } else if (
+    Number(input.rating) > 5 ||
+    Number(input.rating) < 1 ||
+    isNaN(Number(input.rating))
+  ) {
+    error.rating = "Rating is invalid";
+  }
+
+  if (!input.platforms.legth < 1) {
+    error.platforms = "At least one platform";
+  }
+
+  if (!input.genres.legth < 1) {
+    error.genres = "At least one platform";
+  }
+
+  return error;
+}
 
 const Form = () => {
   const platformsRandom = [
@@ -20,6 +57,16 @@ const Form = () => {
     "PS Vita",
   ];
 
+  const [errors, setErrors] = useState({
+    name: "",
+    description: "",
+    release_date: "",
+    rating: 0,
+    platforms: [],
+    background_image: "",
+    genres: [],
+  });
+
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -34,9 +81,6 @@ const Form = () => {
 
   const allGenres = useSelector((state) => state.genres);
 
-  const genre1 = allGenres.slice(0, 10);
-  const genre2 = allGenres.slice(11, 19);
-
   // montamos el componente
   useEffect(() => {
     // Buscamos todos los generos -> didMount
@@ -44,15 +88,25 @@ const Form = () => {
   }, [dispatch]);
 
   const handleChangeInput = (e) => {
-    if (e.target.name === "genres" || e.target.name === "platforms") {
-      const list = input[e.target.name];
-      setInput({
+    // if (e.target.name === "genres" || e.target.name === "platforms") {
+    //   const list = input[e.target.name];
+    //   setInput({
+    //     ...input,
+    //     [e.target.name]: list.concat(e.target.value),
+    //   });
+    // } else {
+    //   setInput({ ...input, [e.target.name]: e.target.value });
+    // }
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+    setErrors(
+      validate({
         ...input,
-        [e.target.name]: list.concat(e.target.value),
-      });
-    } else {
-      setInput({ ...input, [e.target.name]: e.target.value });
-    }
+        [e.target.name]: e.target.value,
+      })
+    );
   };
 
   const handleSumbit = (event) => {
@@ -68,32 +122,6 @@ const Form = () => {
       genres: input.genres,
     };
 
-    // Validaciones
-    if (!game.name) {
-      alert("Name is required");
-      return;
-    }
-
-    if (!game.description) {
-      alert("Description is required");
-      return;
-    }
-
-    if (!game.release_date) {
-      alert("Release date is required");
-      return;
-    }
-
-    if (!game.rating) {
-      alert("Rating is required");
-    } else if (
-      Number(game.rating) > 5 ||
-      Number(game.rating) < 1 ||
-      isNaN(Number(game.rating))
-    ) {
-      alert("Rating is invalid");
-      return;
-    }
     // Creo el videogame en la BD
     dispatch(createVideoGames(game));
     // Reseto el formulario
@@ -118,57 +146,74 @@ const Form = () => {
   // console.log("genre: ",input.genres); // OK
   // console.log("plat: ",input.platforms); // OK
   return (
-    /**
-     * Ruta de creación de videojuegos: debe contener
-
-    [ ] Un formulario controlado con JavaScript con los siguientes campos:
-    Nombre
-    Descripción
-    Fecha de lanzamiento
-    Rating
-    [ ] Posibilidad de seleccionar/agregar varios géneros
-    [ ] Posibilidad de seleccionar/agregar varias plataformas
-    [ ] Botón/Opción para crear un nuevo videojuego
-     */
-    <div className="form">
-      <h3>Create a VideoGame</h3>
+    <div className="fondo">
+      <h3 className="titulo-form">Create a VideoGame</h3>
       <form
         className="formulario"
-        noValidate
         onSubmit={(e) => handleSumbit(e)}
         onChange={(e) => handleChangeInput(e)}
       >
-        <label>Name: </label>
-        <input key="name" type="text" name="name" defaultValue={input.name} />
+        <div className="name">
+          <label>Name: </label>
+          <input key="name" type="text" name="name" defaultValue={input.name} />
+          {errors.name && <p className="danger"> {errors.name} </p>}
+          {console.log(errors.name)}
+          <hr />
+        </div>
+
+        <div className="description">
+          <label>Description: </label>
+          <hr />
+          <textarea
+            key="description"
+            type="text"
+            name="description"
+            defaultValue={input.description}
+            rows="6"
+            cols="40"
+          />
+          {errors.description && (
+            <p className="danger"> {errors.description} </p>
+          )}
+        </div>
         <hr />
 
-        <label>Description: </label>
-        <input
-          key="description"
-          type="text"
-          name="description"
-          defaultValue={input.description}
-        />
-        <hr />
+        <div className="released">
+          <label>Released: </label>
+          <input
+            key="release_date"
+            type="date"
+            name="release_date"
+            required
+            defaultValue={input.release_date}
+          />
+          {errors.released && <p className="danger"> {errors.released} </p>}
+          <hr />
+        </div>
 
-        <label>Released: </label>
-        <input
-          key="release_date"
-          type="date"
-          name="release_date"
-          required
-          defaultValue={input.release_date}
-        />
-        <hr />
+        <div className="rating">
+          <label>Rating: </label>
+          <input
+            key="rating"
+            type="number"
+            name="rating"
+            defaultValue={input.rating}
+            placeholder="1 to 5, example: 3.5"
+          />
+          <hr />
+          {errors.rating && <p className="danger"> {errors.rating} </p>}
+        </div>
 
-        <label>Rating: </label>
-        <input
-          key="rating"
-          type="number"
-          step="any"
-          name="rating"
-          defaultValue={input.rating}
-        />
+        <div className="image">
+          <label>Image: </label>
+          <input
+            key="background_image"
+            type="text"
+            name="background_image"
+            defaultValue={input.background_image}
+            placeholder="URL of an image"
+          />
+        </div>
         <hr />
 
         <div className="checks">
@@ -181,32 +226,14 @@ const Form = () => {
               </div>
             ))}
           </div>
+          {errors.platforms && <p className="danger"> {errors.platforms} </p>}
         </div>
-        <hr />
-        
-        <label>Image: </label>
-        <input
-          key="background_image"
-          type="text"
-          name="background_image"
-          defaultValue={input.background_image}
-        />
         <hr />
 
-        <div className="checkbox">
-          <label>Genres</label>
-        </div>
         <div className="genresDiv">
+          <label>Genres</label>
           <div>
-            {genre1.map((gen) => (
-              <div key={gen.name}>
-                <input type="checkbox" name="genres" value={gen.name}></input>
-                <label name={gen}>{gen.name}</label>
-              </div>
-            ))}
-          </div>
-          <div>
-            {genre2.map((gen) => (
+            {allGenres.map((gen) => (
               <div key={gen.name}>
                 <input type="checkbox" name="genres" value={gen.name}></input>
                 <label name={gen}>{gen.name}</label>
@@ -214,10 +241,14 @@ const Form = () => {
             ))}
           </div>
         </div>
+        {errors.genres && <p className="danger"> {errors.genres} </p>}
         <hr />
 
-        <button type="submit">Create</button>
+        <button className="btn" type="submit">Create</button>
       </form>
+      <Link to={"/videogames"}>
+        <button className="btn2">Home</button>
+      </Link>
     </div>
   );
 };

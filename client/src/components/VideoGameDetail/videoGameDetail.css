@@ -1,0 +1,40 @@
+.detail {
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,0,0,0.592874649859944) 48%, rgba(0,212,255,1) 100%);
+  background-repeat: no-repeat;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.detail p, h1{
+  color: white;
+}
+
+#detail-img {
+  padding-left: 10px;
+  padding-top: 75px;
+  margin-left: 57px;
+  float: left;
+  position: relative;
+  width: 45%;
+  height: auto;
+}
+
+#detail-props {
+  padding-top: 10px;
+  padding-left: 10px;
+  margin-left: 10px;
+  position: relative;
+  float: left;
+  width: 45%;
+  height: auto;
+  font-size: 25px;
+}
+
+#imagen-game {
+  width: 750px;
+  height: 850px;
+  margin: 65px;
+}

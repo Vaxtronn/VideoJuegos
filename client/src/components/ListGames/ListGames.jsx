@@ -7,16 +7,19 @@ import "./ListGames.css";
 const ListGames = () => {
   const dispatch = useDispatch();
 
-  const { videogames, searchVideoGameByName, viewGames, currentPage, limitGames } = useSelector(
+  const { videogames, searchVideoGameByName, viewGames, currentPage, filterGame, limitGames } = useSelector(
     (state) => state
   );
 
   useEffect(() => {
     dispatch(getViewGames())
-  },[dispatch, videogames, searchVideoGameByName, currentPage, limitGames])
+  },[dispatch, videogames, filterGame, searchVideoGameByName, currentPage, limitGames])
 
   return (
     <div className="games">
+      <div className="titulo-game">
+        <h1>GamesTop</h1>
+      </div>
       {
         viewGames.length ?
         viewGames.map(data => {
@@ -25,7 +28,8 @@ const ListGames = () => {
           id={data.id}
           img={data.img}
           name={data.name}
-          genres={data.genres}
+          genres={data.genres.join(" ")}
+          rating={data.rating}
            />
         }): <h1>Loading</h1>
       }

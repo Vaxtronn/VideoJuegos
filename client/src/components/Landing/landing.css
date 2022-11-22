@@ -6,3 +6,36 @@
   height: 100vh;
   width: auto;
 }
+
+.btn-inicio {
+  height: 45px;
+  width: 60px;
+  color: black;
+  font-size: 1.2rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-git {
+  background-image: url("../../img/logo-github.svg");
+  height: 45px;
+  width: 45px;
+  margin-top: 50px;
+  color: #fff;
+  font-size: 1.2rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-linke {
+  background-image: url("../../img/logo-linkedin.svg");
+  height: 45px;
+  width: 45px;
+  color: #fff;
+  font-size: 1.2rem;
+  background-color: #0a66c2;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
